@@ -113,11 +113,14 @@ def print_marc_record(record):
       else:
         print(f"Control {tag}: {field}")
 
-def extract_training_pairs(filepath, output_file):
+def extract_training_pairs(filepath, output_file, filter_file):
   """
   Extreu parells (títol, llista de matèries) per entrenar el model.
   Retorna una llista de diccionaris.
   """
+  with open(filter_file, "r", encoding="utf-8") as f:
+    valid_subjects = set(line.strip() for line in f if line.strip())
+
   with open(output_file, "w", encoding="utf-8") as f:
     #f.write("[\n")  # Inici de la llista JSON
 
@@ -150,12 +153,13 @@ def extract_training_pairs(filepath, output_file):
         if "2" not in subfields or subfields["2"][0].strip() != "lemac":
             continue
         parts = []
-        for code in ("a", "x",): #, "x", "y", "z", "v"):
+        for code in ("a", "x","y", "z", "v",):
           if code in subfields:
               parts.append(subfields[code][0].strip(" ."))
         if parts:
           materia = "--".join(parts)
-          materies.append(materia)
+          if materia in valid_subjects:
+            materies.append(materia)
 
       if materies:
         dedup_materies = list(set(materies))  # Eliminar duplicats

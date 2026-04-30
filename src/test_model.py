@@ -15,7 +15,7 @@ model.eval()
 print("Model carregat!\n")
 
 # ── Funció de predicció ───────────────────────────────────────────
-def suggerir_materies(titol, threshold=0.07, top_n=5):
+def suggerir_materies(titol, threshold=0.01, top_n=5):
     inputs = tokenizer(
         titol,
         return_tensors="pt",
@@ -51,7 +51,7 @@ titols_test = [
     "Gramàtica de la llengua catalana",
     "Cuina mediterrània tradicional",
     "Literatura castellana del Siglo de Oro",
-    "Arquitectura gòtica a Catalunya",
+    "Lligues que ha guanyat el Barça",
 ]
 
 for titol in titols_test:
